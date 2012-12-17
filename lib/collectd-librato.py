@@ -40,7 +40,8 @@ config = { 'api_path' : '/v1/metrics',
            'flush_max_measurements' : 600,
            'flush_timeout_secs' : 15,
            'lower_case' : False,
-           'single_value_names' : False
+           'single_value_names' : False,
+           'append_metric_type' : False,
            }
 plugin_name = 'Collectd-Librato.py'
 types = {}
@@ -252,7 +253,9 @@ def librato_write(v, data=None):
     if v.plugin_instance:
         name.extend(sanitize_field(v.plugin_instance))
 
-    name.append(v.type)
+    if config['append_metric_type']:
+        name.append(v.type)
+
     if v.type_instance:
         name.extend(sanitize_field(v.type_instance))
 
